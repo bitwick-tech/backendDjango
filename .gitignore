@@ -1,3 +1,6 @@
+coinDjango/migrations/__pycache__/
+coinDjango/__pycache__/
 coin/__pycache__/*
-.idea/*
+*.idea/*
+coin/__pycache__*
 venv1/*
