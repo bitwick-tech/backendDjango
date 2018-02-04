@@ -1,6 +1,5 @@
 from django.shortcuts import render
 import pymongo
-import json
 import pytz
 # Create your views here.
 # from django.http import HttpResponse
@@ -20,10 +19,51 @@ def get_data_from_mongo():
     return res
 
 
+def transform_res(res):
+    ret = {}
+    for key, values in res.items():
+        if key == "koinex":
+            ret.update(transform_koinex_data(values["prices"]))
+        elif key == "unocoin":
+            ret.update(transform_unocoin_data(values))
+        elif key == "zebpay":
+            ret.update(transform_zebpay_data(values))
+
+    ret["ts"] = res["ts"]
+    return ret
+
+
 def index(request):
     res = get_data_from_mongo()
+    res = transform_res(res)
     return JsonResponse((res))
     # ({'foo': 'bar'})
 
 # def index(request):
 #    return HttpResponse("Hello, world. You're at the polls index.")
+
+
+def transform_koinex_data(res):
+    ret = {}
+    for key, val in res.items():
+        newkey = (key.lower() + "__koinex")
+        ret[newkey] = {}
+        ret[newkey]["cp"] = str(val)
+        ret[newkey]["currency"] = "INR"
+    return ret
+
+
+def transform_unocoin_data(res):
+    ret = {}
+    ret["btc__unocoin"] = {}
+    ret["btc__unocoin"]["cp"] = str(res["buybtc"])
+    ret["btc__unocoin"]["currency"] = "INR"
+    return ret
+
+
+def transform_zebpay_data(res):
+    ret = {}
+    ret["btc__zebpay"] = {}
+    ret["btc__zebpay"]["cp"] = str(res["buy"])
+    ret["btc__zebpay"]["currency"] = "INR"
+    return ret
