@@ -24,7 +24,7 @@ def transform_res(res):
     ret["coinData"] = []
     for key, values in res.items():
         if key == "koinex":
-            ret["coinData"].append(transform_koinex_data(values["prices"]))
+            ret["coinData"] = ret["coinData"] + (transform_koinex_data(values["prices"]))
         elif key == "unocoin":
             ret["coinData"].append(transform_unocoin_data(values))
         elif key == "zebpay":
@@ -45,12 +45,14 @@ def index(request):
 
 
 def transform_koinex_data(res):
-    ret = {}
+    ret = []
     for key, val in res.items():
+        tmp = {}
         newkey = (key.lower() + "__koinex")
-        ret[newkey] = {}
-        ret[newkey]["cp"] = str(val)
-        ret[newkey]["currency"] = "INR"
+        tmp[newkey] = {}
+        tmp[newkey]["cp"] = str(val)
+        tmp[newkey]["currency"] = "INR"
+        ret.append(tmp)
     return ret
 
 
