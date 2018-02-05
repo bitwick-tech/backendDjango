@@ -21,13 +21,14 @@ def get_data_from_mongo():
 
 def transform_res(res):
     ret = {}
+    ret["coinData"] = []
     for key, values in res.items():
         if key == "koinex":
-            ret.update(transform_koinex_data(values["prices"]))
+            ret["coinData"].append(transform_koinex_data(values["prices"]))
         elif key == "unocoin":
-            ret.update(transform_unocoin_data(values))
+            ret["coinData"].append(transform_unocoin_data(values))
         elif key == "zebpay":
-            ret.update(transform_zebpay_data(values))
+            ret["coinData"].append(transform_zebpay_data(values))
 
     ret["ts"] = res["ts"]
     return ret
