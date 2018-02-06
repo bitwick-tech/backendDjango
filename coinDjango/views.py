@@ -6,6 +6,25 @@ import pytz
 
 from django.http import JsonResponse
 
+coinMapping = {}
+coinMapping["btc"]="Bitcoin"
+coinMapping["bch"]="Bitcoin Cash/BCC"
+coinMapping["xrp"]="Ripple"
+coinMapping["eth"]="Ether"
+coinMapping["ltc"]="Litecoin"
+coinMapping["omg"]="Omisego"
+coinMapping["gnt"]="Golem"
+coinMapping["miota"]="IOTA"
+coinMapping["btc__zebpay"]="Bitcoin  ZEBPAY"
+coinMapping["btc__unocoin"]="Bitcoin  UNOCOIN"
+coinMapping["btc__koinex"]="Bitcoin  KOINEX"
+coinMapping["xrp__koinex"]="Ripple  KOINEX"
+coinMapping["bch__koinex"]="Bitcoin Cash/BCC  KOINEX"
+coinMapping["eth__koinex"]="Ether  KOINEX"
+coinMapping["ltc__koinex"]="Litecoin  KOINEX"
+coinMapping["omg__koinex"]="Omisego  KOINEX"
+coinMapping["miota__koinex"]="IOTA  KOINEX"
+coinMapping["gnt__koinex"]="GOLEM  KOINEX"
 
 def get_data_from_mongo():
     client = pymongo.MongoClient()
@@ -16,6 +35,14 @@ def get_data_from_mongo():
         res = d
     res.pop('_id')
     res["ts"] = res["ts"].replace(tzinfo=pytz.utc).timestamp()
+    return res
+
+
+def fill_coin_data(id):
+    res = {}
+    res["id"] = id
+    res["name"] = coinMapping[id]
+    res["currency"] = "INR"
     return res
 
 
@@ -35,8 +62,15 @@ def transform_res(res):
 
 
 def index(request):
+    paramsString = request.GET.get('q', '')
+    if not paramsString:
+        params = []
+    else:
+        params = paramsString.split(",")
     res = get_data_from_mongo()
     res = transform_res(res)
+    if len(params) > 0:
+        res["coinData"] = trim_result_for_request(res["coinData"], params)
     return JsonResponse((res))
     # ({'foo': 'bar'})
 
@@ -49,24 +83,30 @@ def transform_koinex_data(res):
     for key, val in res.items():
         tmp = {}
         newkey = (key.lower() + "__koinex")
-        tmp[newkey] = {}
-        tmp[newkey]["cp"] = str(val)
-        tmp[newkey]["currency"] = "INR"
+        tmp = {}
+        tmp = fill_coin_data(newkey)
+        tmp["cp"] = str(val)
         ret.append(tmp)
     return ret
 
 
 def transform_unocoin_data(res):
     ret = {}
-    ret["btc__unocoin"] = {}
-    ret["btc__unocoin"]["cp"] = str(res["buybtc"])
-    ret["btc__unocoin"]["currency"] = "INR"
+    ret = fill_coin_data("btc_unocoin")
+    ret["cp"] = str(res["buybtc"])
     return ret
 
 
 def transform_zebpay_data(res):
     ret = {}
-    ret["btc__zebpay"] = {}
-    ret["btc__zebpay"]["cp"] = str(res["buy"])
-    ret["btc__zebpay"]["currency"] = "INR"
+    ret = fill_coin_data("btc__zebpay")
+    ret["cp"] = str(res["buy"])
+    return ret
+
+
+def trim_result_for_request(res, params):
+    ret = []
+    for coin in res:
+        if coin["id"] in params:
+            ret.append(coin)
     return ret
