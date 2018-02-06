@@ -26,6 +26,7 @@ coinMapping["omg__koinex"]="Omisego  KOINEX"
 coinMapping["miota__koinex"]="IOTA  KOINEX"
 coinMapping["gnt__koinex"]="GOLEM  KOINEX"
 
+
 def get_data_from_mongo():
     client = pymongo.MongoClient()
     db = client.coinExchangeDB
@@ -92,7 +93,7 @@ def transform_koinex_data(res):
 
 def transform_unocoin_data(res):
     ret = {}
-    ret = fill_coin_data("btc_unocoin")
+    ret = fill_coin_data("btc__unocoin")
     ret["cp"] = str(res["buybtc"])
     return ret
 
