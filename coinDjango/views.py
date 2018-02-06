@@ -1,10 +1,17 @@
 from django.shortcuts import render
+from django.conf import settings
 import pymongo
 import pytz
 # Create your views here.
 # from django.http import HttpResponse
 
 from django.http import JsonResponse
+
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.views.decorators.cache import cache_page
+
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 coinMapping = {}
 coinMapping["btc"]="Bitcoin"
@@ -62,7 +69,9 @@ def transform_res(res):
     return ret
 
 
+@cache_page(CACHE_TTL)
 def index(request):
+
     paramsString = request.GET.get('q', '')
     if not paramsString:
         params = []
