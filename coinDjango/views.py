@@ -51,6 +51,7 @@ def fill_coin_data(id):
     res["id"] = id
     res["name"] = coinMapping[id]
     res["currency"] = "INR"
+    res["op"] = "0.0"
     return res
 
 
