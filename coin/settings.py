@@ -105,7 +105,7 @@ CACHES = {
     }
 }
 
-CACHE_TTL = 30
+CACHE_TTL = 5
 
 
 # Password validation
