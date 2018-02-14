@@ -101,6 +101,14 @@ def index(request):
     return JsonResponse((res))
     # ({'foo': 'bar'})
 
+
+@cache_page(900)
+def frequency(request):
+    ret = {}
+    ret["w"] = 30
+    ret['a'] = 30
+    return JsonResponse(ret)
+
 # def index(request):
 #    return HttpResponse("Hello, world. You're at the polls index.")
 
