@@ -86,7 +86,7 @@ def get_data_from_redis():
 
 
 @cache_page(CACHE_TTL)
-def index(request):
+def coins(request):
 
     paramsString = request.GET.get('q', '')
     if not paramsString:
@@ -108,6 +108,11 @@ def frequency(request):
     ret["w"] = 30
     ret['a'] = 30
     return JsonResponse(ret)
+
+@cache_page(CACHE_TTL)
+def index(request):
+    return JsonResponse({"hello ": "world!"})
+
 
 # def index(request):
 #    return HttpResponse("Hello, world. You're at the polls index.")
