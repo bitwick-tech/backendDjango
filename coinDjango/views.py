@@ -105,8 +105,8 @@ def coins(request):
 @cache_page(900)
 def frequency(request):
     ret = {}
-    ret["w"] = 30
-    ret['a'] = 30
+    ret["w"] = 20
+    ret['a'] = 20
     return JsonResponse(ret)
 
 @cache_page(CACHE_TTL)
