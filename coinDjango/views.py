@@ -3,8 +3,8 @@ from django.conf import settings
 import pymongo
 import pytz
 # Create your views here.
-# from django.http import HttpResponse
-
+from django.http import HttpResponse
+from django.template import Context, loader
 from django.http import JsonResponse
 import json
 import redis
@@ -81,7 +81,7 @@ def get_data_from_redis():
     key = "latestCoinData"
     garbage = r.get(key)
     garbage = json.loads(garbage)
-    print(garbage["coinData"])
+#    print(garbage["coinData"])
     return garbage
 
 
@@ -109,9 +109,12 @@ def frequency(request):
     ret['a'] = 20
     return JsonResponse(ret)
 
-@cache_page(CACHE_TTL)
+@cache_page(9000)
 def index(request):
-    return JsonResponse({"hello ": "world!"})
+    template = loader.get_template("index.html")
+    return HttpResponse(template.render())
+
+#    return JsonResponse({"hello ": "world!"})
 
 
 # def index(request):
