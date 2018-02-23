@@ -1,0 +1,5 @@
+5484:C 21 Feb 02:14:27.152 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+5484:C 21 Feb 02:14:27.153 # Redis version=4.0.8, bits=64, commit=00000000, modified=0, pid=5484, just started
+5484:C 21 Feb 02:14:27.153 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+5484:M 21 Feb 02:14:27.155 * Increased maximum number of open files to 10032 (it was originally set to 256).
+5484:M 21 Feb 02:14:27.156 # Creating Server TCP listening socket *:6379: bind: Address already in use
