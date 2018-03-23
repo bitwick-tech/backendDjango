@@ -56,7 +56,6 @@ def trim_result_for_request(res, params):
     return ret
 
 
-@cache_page(90)
 def get_all_coins_static_data(request):
     r = redis.Redis(host=redis_host, port=6379, db=0)
     key = "allCoinsStaticDataHash"
