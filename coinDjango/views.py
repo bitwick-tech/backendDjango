@@ -37,9 +37,9 @@ def coins(request):
 @cache_page(9)
 def frequency(request):
     ret = {}
-    ret["w"] = 20
-    ret['a'] = 20
-    ret["st_d_v"] = 7
+    ret["w"] = 12
+    ret['a'] = 12
+    ret["st_d_v"] = 8
     return JsonResponse(ret)
 
 @cache_page(900)
