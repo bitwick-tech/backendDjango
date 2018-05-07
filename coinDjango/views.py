@@ -39,7 +39,7 @@ def frequency(request):
     ret = {}
     ret["w"] = 12
     ret['a'] = 12
-    ret["st_d_v"] = 13
+    ret["st_d_v"] = 14
     return JsonResponse(ret)
 
 @cache_page(900)
